@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wards</title>
+    <meta charset="utf-8" />
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+    <link rel="stylesheet" href="../1_0/leaflet.label.css"/>
+		<style>
+			body {padding: 0;margin: 0}
+			html, body, #map {height: 100%;width: 100%}
+		</style>		
+  </head>
+  <body>
+    <div id="map"></div>
+		<script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+    <script src="../1_0/leaflet.label-src.js"></script>
+
+    <script src="BANES Boundary.geojson"></script> 
+ 
+ <script src="Bristol Boundary2.geojson"></script> 
+    <script src="SGlos Boundary2.geojson"></script> 
+    
+    <script src="BANESWards2.geojson"></script> 
+    <script src="BristolWards2.geojson"></script> 
+    <script src="SGlos Wards.geojson"></script>
+
+<!--  -->
+    <script src="os_woodland.geojson"></script>
+
+    <script>
+      var map = L.map('map', {
+				layers: [L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')],
+								maxZoom: 19
+
+				});
+    
+      // Has to be after map.on('load
+  	  map.setView([51.35,-2.47], 11.5);
+  
+  		function styleWards(feature) {
+			return {
+				weight: 2,
+				opacity: 1,
+				color: 'brown',
+				dashArray: '5',
+				fillOpacity: 0.3,
+				fillColor: '#FED976'
+			};
+		}
+    
+    function BANESstyle(feature) {
+			return {
+				weight: 5,
+				opacity: 1,
+        color: '#cb3434', // paler brown
+        fillOpacity: 0
+			};
+		}
+
+		function highlightFeature(e) {
+			var layer = e.target;
+
+			layer.setStyle({
+				weight: 5,
+				color: 'DarkRed',
+				dashArray: '',
+				fillOpacity: 0
+			});
+
+			if (!L.Browser.ie && !L.Browser.opera) {
+				layer.bringToFront();
+			}
+//			info.update(layer.feature.properties);
+		}
+
+		var geojson;
+
+		function resetHighlight(e) {
+			geojson.resetStyle(e.target);
+			info.update();
+		}
+
+		function zoomToFeature(e) {
+			map.fitBounds(e.target.getBounds());
+		}
+
+		function onEachFeatureWards(feature, layer) {
+      WardName = feature.properties.WD13NM
+      layer.bindLabel(WardName)
+			
+      layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				click: zoomToFeature
+			});
+		}
+
+// ***** Boundary *****    
+    
+    var boundary = L.geoJson(BANESBoundary, {
+			style: BANESstyle,
+		}).addTo(map);
+    
+    var boundary = L.geoJson(BristolBoundary2, {
+			style: BANESstyle,
+		}).addTo(map);
+    
+    var boundary = L.geoJson(SGlosBoundary2, {
+			style: BANESstyle,
+		}).addTo(map);
+    
+// ***** Wards *****    
+
+		geojson = L.geoJson(BANESWards2, {
+			style: styleWards,
+			onEachFeature: onEachFeatureWards
+		}).addTo(map);
+    
+ 		geojson = L.geoJson(BristolWards2, {
+			style: styleWards,
+			onEachFeature: onEachFeatureWards
+		}).addTo(map);
+    
+    geojson = L.geoJson(SGlosWards, {
+			style: styleWards,
+			onEachFeature: onEachFeatureWards
+		}).addTo(map);
+
+
+//    geojson = L.geoJson(os_woodland, {
+//		}).addTo(map);
+
+    
+    
+//		L.geoJson(BristolWards, {
+//			style: style,
+//			onEachFeature: onEachFeature
+//		}).addTo(map);
+
+
+//      Loc = descript.indexOf("<th>NAME")
+//      StartPos = Loc + 18
+//      EndStr = descript.substr(StartPos)
+//      EndPos = EndStr.indexOf("Ward")  
+//      WardName = descript.substr(StartPos, EndPos)
+
+
+    </script>
+  </body>
+</html>
