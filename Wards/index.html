@@ -3,7 +3,7 @@
   <head>
     <title>Wards</title>
     <meta charset="utf-8" />
-		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
     <link rel="stylesheet" href="../1_0/leaflet.label.css"/>
 		<style>
 			body {padding: 0;margin: 0}
@@ -12,19 +12,22 @@
   </head>
   <body>
     <div id="map"></div>
-		<script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+		<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
     <script src="../1_0/leaflet.label-src.js"></script>
 
     <script src="BANES Boundary.geojson"></script> 
- 
- <script src="Bristol Boundary2.geojson"></script> 
+    <script src="BANESWards2.geojson"></script> 
+
+    <script src="BristolWards2.geojson"></script> 
+
+		<script src="BANES New Wards.geojson"></script> 
+		
+		<!--  		<script src="Bristol Boundary2.geojson"></script> 
     <script src="SGlos Boundary2.geojson"></script> 
     
-    <script src="BANESWards2.geojson"></script> 
-    <script src="BristolWards2.geojson"></script> 
     <script src="SGlos Wards.geojson"></script>
-
-	  
+    <script src="Bath_and_North_East_Somerset_Final_Proposals.geojson"></script>
+ -->
 <!--  -->
     <script src="os_woodland.geojson"></script>
 
@@ -38,7 +41,7 @@
       // Has to be after map.on('load
   	  map.setView([51.35,-2.47], 11.5);
   
-  		function styleWards(feature) {
+  		function styleWardsOld(feature) {
 			return {
 				weight: 2,
 				opacity: 1,
@@ -49,7 +52,18 @@
 			};
 		}
     
-    function BANESstyle(feature) {
+		function styleWardsNew(feature) {
+			return {
+				weight: 1,
+				opacity: 1,
+				color: 'blue',
+				dashArray: '5',
+				fillOpacity: 0.3,
+				fillColor: '#FED976'
+			};
+		}
+		
+    function BANESBorderStyle(feature) {
 			return {
 				weight: 5,
 				opacity: 1,
@@ -60,7 +74,6 @@
 
 		function highlightFeature(e) {
 			var layer = e.target;
-
 			layer.setStyle({
 				weight: 5,
 				color: 'DarkRed',
@@ -77,7 +90,9 @@
 		var geojson;
 
 		function resetHighlight(e) {
+//		 alert(e.target);
 			geojson.resetStyle(e.target);
+			geojson2.resetStyle(e.target);
 			info.update();
 		}
 
@@ -86,7 +101,7 @@
 		}
 
 		function onEachFeatureWards(feature, layer) {
-      WardName = feature.properties.WD13NM
+      WardName = feature.properties.Ward_name
       layer.bindLabel(WardName)
 			
       layer.on({
@@ -98,32 +113,28 @@
 
 // ***** Boundary *****    
     
-    var boundary = L.geoJson(BANESBoundary, {
-			style: BANESstyle,
-		}).addTo(map);
-    
-    var boundary = L.geoJson(BristolBoundary2, {
-			style: BANESstyle,
-		}).addTo(map);
-    
-    var boundary = L.geoJson(SGlosBoundary2, {
-			style: BANESstyle,
-		}).addTo(map);
+
+    var boundary = L.geoJson(BANESBoundary, {style: BANESBorderStyle,}).addTo(map);
+ //   var boundary = L.geoJson(BristolBoundary2).addTo(map);
+
+ //   var boundary = L.geoJson(BristolBoundary2, {style: BANESBorderStyle,}).addTo(map);
+ //   var boundary = L.geoJson(SGlosBoundary2, {style: BANESBorderStyle,}).addTo(map);
+		
     
 // ***** Wards *****    
 
-		geojson = L.geoJson(BANESWards2, {
-			style: styleWards,
+	//	var geojson = L.geoJson(BANESWards2, {style: styleWardsOld,onEachFeature: onEachFeatureWards}).addTo(map);
+		
+		var geojson2 = L.geoJson(BANESNewWards, {style: styleWardsNew, onEachFeature: onEachFeatureWards}).addTo(map); // New BANES constituencies  
+
+    
+ 		var geojson = L.geoJson(BristolWards2, {
+			style: styleWardsOld,
 			onEachFeature: onEachFeatureWards
 		}).addTo(map);
     
- 		geojson = L.geoJson(BristolWards2, {
-			style: styleWards,
-			onEachFeature: onEachFeatureWards
-		}).addTo(map);
-    
-    geojson = L.geoJson(SGlosWards, {
-			style: styleWards,
+     var geojson = L.geoJson(SGlosWards, {
+			style: styleWardsOld,
 			onEachFeature: onEachFeatureWards
 		}).addTo(map);
 
