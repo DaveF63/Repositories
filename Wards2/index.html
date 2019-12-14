@@ -17,9 +17,7 @@
 
     <script src="BANES Boundary.geojson"></script> 
     <script src="BANESWards2.geojson"></script> 
-
     <script src="BristolWards2.geojson"></script> 
-
 		<script src="BANES New Wards.geojson"></script> 
 		
 		<!--  		<script src="Bristol Boundary2.geojson"></script> 
@@ -29,8 +27,6 @@
     <script src="Bath_and_North_East_Somerset_Final_Proposals.geojson"></script>
  -->
 <!--  -->
-    <script src="os_woodland.geojson"></script>
-
     <script>
       var map = L.map('map', {
 				layers: [L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')],
@@ -92,7 +88,7 @@
 		function resetHighlight(e) {
 //		 alert(e.target);
 			geojson.resetStyle(e.target);
-			geojson2.resetStyle(e.target);
+//			geojson2.resetStyle(e.target);
 			info.update();
 		}
 
@@ -125,7 +121,7 @@
 
 	//	var geojson = L.geoJson(BANESWards2, {style: styleWardsOld,onEachFeature: onEachFeatureWards}).addTo(map);
 		
-		var geojson2 = L.geoJson(BANESNewWards, {style: styleWardsNew, onEachFeature: onEachFeatureWards}).addTo(map); // New BANES constituencies  
+		var geojson = L.geoJson(BANESNewWards, {style: styleWardsNew, onEachFeature: onEachFeatureWards}).addTo(map); // New BANES constituencies  
 
     
  		var geojson = L.geoJson(BristolWards2, {
